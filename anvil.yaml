@@ -1,7 +1,7 @@
 allow_embedding: false
 dependencies: []
-name: M3 App 1
-package_name: M3_App_1
+name: Interactive Campus Map
+package_name: Interactive_Campus_Map
 renamed: true
 runtime_options:
   client_version: '3'
