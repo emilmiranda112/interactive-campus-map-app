@@ -4,14 +4,9 @@ import io
 
 @anvil.server.callable
 def load_campus_data():
-  # Open the file exactly where Git places it in the root folder
-  try:
-    with open("campus_locations.csv", "r") as f:
-      csv_data = f.read()
-  except FileNotFoundError:
-    # If there is a typo in the filename, look for lowercase version
-    with open("campus_locations.csv", "r") as f:
-      csv_data = f.read()
+  # Since it's right in the same folder now, we can open it directly!
+  with open("campus_locations.csv", "r") as f:
+    csv_data = f.read()
 
   f_input = io.StringIO(csv_data)
   reader = csv.DictReader(f_input)
