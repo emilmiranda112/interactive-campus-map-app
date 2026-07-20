@@ -8,7 +8,7 @@ def load_campus_data():
   # 1. We load the CSV file that you saved in your repository
   # (Anvil allows us to access repository assets directly)
   try:
-    with open("theme/assets/campus_locations.csv", "r") as f:
+    with open("_anvil_designercampus_locations.csv", "r") as f:
       csv_data = f.read()
   except FileNotFoundError:
     # Fallback dataset in case the file sync is still processing

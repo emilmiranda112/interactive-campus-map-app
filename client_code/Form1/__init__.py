@@ -67,7 +67,7 @@ class Form1(Form1Template):
     # 3. Center the map automatically near your campus coordinates
     # (Update these two numbers to match your actual campus center!)
     if self.locations:
-      self.map_campus.center = anvil.GoogleMap.LatLng(self.locations[0]['lat'], self.locations[0]['lng'])
+      self.map_campus.center = anvil.GoogleMap.LatLng(33.163395832473206, -117.24753965466618)
       self.map_campus.zoom = 16
 
       # 4. Generate the markers dynamically onto your custom map face
