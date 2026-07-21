@@ -1,20 +1,19 @@
 import anvil.server
 import csv
 import io
+import urllib.request
 
 @anvil.server.callable
 def load_campus_data():
-  # We place your exact CSV text inside a Python multi-line string block!
-  csv_data = """name,latitude,longitude,description
-Longhorn Stadium,33.16778653811,-117.24888490044398,Where our track and field events take place
-Longhorn Baseball Field,33.16767357499181,-117.2471256499127,Where our baseball games take place
-Varsity Softball Field,33.167470321828444,-117.24682116818746,Where our softball games take place
-Performing Arts Center,33.16759231243326,-117.24619196969348,Where our plays take place
-Gymnasium,33.16928622384654,-117.2458165100435,Where our basketball games take place
-Library,33.16923944548034,-117.24784133852441,The quietest place to study
-"""
+  # Insert your Raw GitHub URL here!
+  github_csv_url = "https://raw.githubusercontent.com/emilmiranda112/interactive-campus-map-app/refs/heads/master/server_code/campus_locations.csv"
 
-  # This treats the string exactly like an open file on your computer
+  # Fetch the latest CSV directly from GitHub
+  req = urllib.request.Request(github_csv_url, headers={'User-Agent': 'Mozilla/5.0'})
+  with urllib.request.urlopen(req) as response:
+    csv_data = response.read().decode('utf-8')
+
+  # Parse the CSV contents dynamically
   f_input = io.StringIO(csv_data)
   reader = csv.DictReader(f_input)
 

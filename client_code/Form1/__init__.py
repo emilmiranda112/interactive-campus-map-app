@@ -63,7 +63,7 @@ class Form1(Form1Template):
 
     # 2. Call the server module backend you wrote on Day 6 to get data
     self.locations = anvil.server.call('load_campus_data')
-
+    
     # 3. Center the map automatically near your campus coordinates
     # (Update these two numbers to match your actual campus center!)
     if self.locations:
@@ -86,3 +86,8 @@ class Form1(Form1Template):
 
       # Add the marker to your styled map canvas
       self.map_campus.add_component(marker)
+
+  @handle("dropdown_locations", "change")
+  def dropdown_locations_change(self, **event_args):
+    """This method is called when the text in this text box is edited"""
+    pass  # Wr
