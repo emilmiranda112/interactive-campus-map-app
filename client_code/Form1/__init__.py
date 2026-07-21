@@ -119,6 +119,8 @@ class Form1(Form1Template):
     # Clear existing map markers
     self.map_campus.clear()
 
+    
+
     #Re-add user live location
     if getattr(self, 'user_marker', None) is not None:
       self.map_campus.add_component(self.user_marker)
