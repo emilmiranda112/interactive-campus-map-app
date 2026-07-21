@@ -145,7 +145,14 @@ class Form1(Form1Template):
           title=loc['name']
         )
         marker.tag = loc['desc']
+        marker.add_event_handler("click", self.marker_click)
         self.map_campus.add_component(marker)
+        
+  def marker_click(self, sender, **event_args):
+    """Fires whenever the user clicks on a map marker pin."""
+    # 'sender' is the specific marker pin that was clicked!
+    # sender.title is the name, and sender.tag is the description.
+    alert(content=sender.tag, title=sender.title)
 
   @handle("check_box_sports", "change")
   def check_box_sports_change(self, **event_args):
