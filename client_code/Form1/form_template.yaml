@@ -59,6 +59,10 @@ components:
   name: column_panel_1
   properties: {}
   type: ColumnPanel
+- layout_properties: {slot: title}
+  name: text_box_1
+  properties: {background: white, enabled: false, foreground: '#000000', text: Places, visible: true}
+  type: TextBox
 container:
   properties: {html: '@theme:standard-page.html'}
   type: HtmlTemplate

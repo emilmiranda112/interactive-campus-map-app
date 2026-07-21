@@ -1,9 +1,11 @@
 from ._anvil_designer import Form1Template
 import anvil.server
 from anvil import *
+import anvil.js
 
 class Form1(Form1Template):
   def __init__(self, **properties):
+    self.user_marker = None
     # Set up components and initialize form
     self.init_components(**properties)
 
@@ -70,7 +72,49 @@ class Form1(Form1Template):
 
     # 4. Generate initial markers
     self.drop_map_markers()
-  
+    self.start_user_tracking()
+
+  def start_user_tracking(self):
+    """Requests GPS permission and tracks the user's position live."""
+    geolocation = anvil.js.window.navigator.geolocation
+
+    if geolocation:
+      # Options for high accuracy live GPS tracking
+      options = {
+        'enableHighAccuracy': True,
+        'maximumAge': 0,
+        'timeout': 10000
+      }
+
+      # watchPosition updates automatically whenever the user moves!
+      geolocation.watchPosition(
+        self.update_user_location,
+        self.handle_location_error,
+        options
+      )
+    else:
+      print("Geolocation is not supported by this browser.")
+
+  def update_user_location(self, position, **event_args):
+    """Callback function triggered every time the user's coordinates change."""
+    lat = position.coords.latitude
+    lng = position.coords.longitude
+    user_pos = anvil.GoogleMap.LatLng(lat, lng)
+
+    # If user marker doesn't exist yet, create it
+    if self.user_marker is None:
+      self.user_marker = anvil.GoogleMap.Marker(
+        position=user_pos,
+        title="You are here!",
+        icon="https://maps.google.com/mapfiles/ms/icons/blue-dot.png"  # Distinct blue pin
+      )
+      self.map_campus.add_component(self.user_marker)
+    else:
+      # Just update the existing marker's position
+      self.user_marker.position = user_pos
+
+  def handle_location_error(self, error, **event_args):
+    print("Could not retrieve user location:", error.message)
   def drop_map_markers(self):
     # Clear existing map markers
     self.map_campus.clear()
