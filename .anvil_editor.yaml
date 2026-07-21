@@ -4,6 +4,8 @@ unique_ids:
     theme.css: XV6QEVOBEGIIEOTR322PXNSQEDEFFKLB
   forms:
     Form1: ETPGQD2T4PAZPOWU43F4MY5F77TW5P5K
+    Form1.ItemTemplate1: '1784602732298974005847839.5803'
+    Form1.ItemTemplate2: '1784602750768452968879213.22504'
   modules: {}
   scripts: {}
   server_modules:

@@ -60,34 +60,51 @@ class Form1(Form1Template):
       }
     ]
     self.map_campus.map_type_id = 'satellite'
+    # 2. Keep map centered on your specific hardcoded location
+    self.map_campus.center = anvil.GoogleMap.LatLng(33.163395832473206, -117.24753965466618)
+    self.map_campus.zoom = 17
 
-    # 2. Call the server module backend you wrote on Day 6 to get data
+    # 3. Fetch dataset from DataParser backend
     self.locations = anvil.server.call('load_campus_data')
-    
-    # 3. Center the map automatically near your campus coordinates
-    # (Update these two numbers to match your actual campus center!)
-    if self.locations:
-      self.map_campus.center = anvil.GoogleMap.LatLng(33.163395832473206, -117.24753965466618)
-      self.map_campus.zoom = 16
 
-      # 4. Generate the markers dynamically onto your custom map face
-      self.drop_map_markers()
+    # 4. Generate initial markers
+    self.drop_map_markers()
 
   def drop_map_markers(self):
-    # Loop through your parsed CSV data to drop pins
+    # Clear existing map markers
+    self.map_campus.clear()
+
+    active_categories = []
+
+    # Check states of your checkboxes
+    if self.check_box_academic.checked:
+      active_categories.append("Academic & Culture")
+    if self.check_box_sports.checked:
+      active_categories.append("Sports")
+    if self.check_box_restrooms.checked:
+      active_categories.append("Restrooms")
+    if self.check_box_classrooms.checked:
+      active_categories.append("Classrooms")
+
+    # Add markers that match selected categories
     for loc in self.locations:
-      marker = anvil.GoogleMap.Marker(
-        position=anvil.GoogleMap.LatLng(loc['lat'], loc['lng']),
-        title=loc['name']
-      )
+      if loc.get('category') in active_categories:
+        marker = anvil.GoogleMap.Marker(
+          position=anvil.GoogleMap.LatLng(loc['lat'], loc['lng']),
+          title=loc['name']
+        )
+        marker.tag = loc['desc']
+        self.map_campus.add_component(marker)
 
-      # Tag the marker object with its description for later UI popups
-      marker.tag = loc['desc']
+  # Checkbox event handlers
+  def check_box_sports_change(self, **event_args):
+    self.drop_map_markers()
 
-      # Add the marker to your styled map canvas
-      self.map_campus.add_component(marker)
+  def check_box_academic_change(self, **event_args):
+    self.drop_map_markers()
 
-  @handle("dropdown_locations", "change")
-  def dropdown_locations_change(self, **event_args):
-    """This method is called when the text in this text box is edited"""
-    pass  # Wr
+  def check_box_restrooms_change(self, **event_args):
+    self.drop_map_markers()
+
+  def check_box_classrooms_change(self, **event_args):
+    self.drop_map_markers()

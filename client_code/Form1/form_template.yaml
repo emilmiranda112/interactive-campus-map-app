@@ -30,6 +30,32 @@ components:
   name: navbar_links
   properties: {}
   type: FlowPanel
+- components:
+  - event_bindings: {}
+    layout_properties: {grid_position: 'PWTKQD,SCCSII'}
+    name: check_box_sports
+    properties: {checked: true, text: Sports}
+    type: CheckBox
+  - layout_properties: {grid_position: 'WHEMCT,ACXFWB'}
+    name: check_box_academic
+    properties: {checked: true, text: Academic & Culture}
+    type: CheckBox
+  - layout_properties: {grid_position: 'NDYSJB,QKOKXE'}
+    name: check_box_restrooms
+    properties: {checked: true, text: Restrooms}
+    type: CheckBox
+  - layout_properties: {grid_position: 'XWASXL,MNNRBL'}
+    name: check_box_classrooms
+    properties: {checked: true, text: Clasrooms}
+    type: CheckBox
+  - layout_properties: {grid_position: 'MONTYB,KQLVQN'}
+    name: check_box_5
+    properties: {text: check_box_5}
+    type: CheckBox
+  layout_properties: {slot: left-nav}
+  name: column_panel_1
+  properties: {}
+  type: ColumnPanel
 container:
   properties: {html: '@theme:standard-page.html'}
   type: HtmlTemplate
