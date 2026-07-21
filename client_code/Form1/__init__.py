@@ -63,13 +63,14 @@ class Form1(Form1Template):
     # 2. Keep map centered on your specific hardcoded location
     self.map_campus.center = anvil.GoogleMap.LatLng(33.163395832473206, -117.24753965466618)
     self.map_campus.zoom = 17
-
+    
+    self.active_categories = set()
     # 3. Fetch dataset from DataParser backend
     self.locations = anvil.server.call('load_campus_data')
 
     # 4. Generate initial markers
     self.drop_map_markers()
-
+  
   def drop_map_markers(self):
     # Clear existing map markers
     self.map_campus.clear()
@@ -88,7 +89,8 @@ class Form1(Form1Template):
 
     # Add markers that match selected categories
     for loc in self.locations:
-      if loc.get('category') in active_categories:
+      category = loc.get('category', '').strip()
+      if category in active_categories:
         marker = anvil.GoogleMap.Marker(
           position=anvil.GoogleMap.LatLng(loc['lat'], loc['lng']),
           title=loc['name']
@@ -96,15 +98,23 @@ class Form1(Form1Template):
         marker.tag = loc['desc']
         self.map_campus.add_component(marker)
 
-  # Checkbox event handlers
+  @handle("check_box_sports", "change")
   def check_box_sports_change(self, **event_args):
+    """This method is called when this checkbox is checked or unchecked"""
     self.drop_map_markers()
 
-  def check_box_academic_change(self, **event_args):
+  @handle("check_box_academic", "change")
+  def check_box_academics_change(self, **event_args):
+    """This method is called when this checkbox is checked or unchecked"""
     self.drop_map_markers()
 
+  @handle("check_box_restrooms", "change")
   def check_box_restrooms_change(self, **event_args):
+    """This method is called when this checkbox is checked or unchecked"""
     self.drop_map_markers()
 
+  @handle("check_box_classrooms", "change")
   def check_box_classrooms_change(self, **event_args):
+    """This method is called when this checkbox is checked or unchecked"""
     self.drop_map_markers()
+
