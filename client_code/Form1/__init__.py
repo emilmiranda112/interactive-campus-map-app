@@ -116,17 +116,17 @@ class Form1(Form1Template):
   def handle_location_error(self, error, **event_args):
     print("Could not retrieve user location:", error.message)
   def drop_map_markers(self):
-    # Clear existing map markers
+    # 1. Clear the map
     self.map_campus.clear()
 
-    
-
-    #Re-add user live location
+    # 2. Re-add live user location pin if active
     if getattr(self, 'user_marker', None) is not None:
       self.map_campus.add_component(self.user_marker)
-      
+
+    # 3. DEFINE ACTIVE_CATEGORIES FIRST (Fixes 'undefined' error!)
     active_categories = []
-    # Check states of your checkboxes
+
+    # 4. Check state of each checkbox and add active ones
     if self.check_box_academic.checked:
       active_categories.append("Academic & Culture")
     if self.check_box_sports.checked:
@@ -136,14 +136,40 @@ class Form1(Form1Template):
     if self.check_box_classrooms.checked:
       active_categories.append("Classrooms")
 
-    # Add markers that match selected categories
+    # 5. Define icons
+    icon_size = anvil.GoogleMap.Size(20, 20)
+
+    category_icons = {
+      "Restrooms": {
+        'url': "_/theme/TransparentRestroomIcon.jpg",
+        'scaledSize': icon_size
+      },
+      "Sports": {
+        'url': "_/theme/SportsIcon.png",
+        'scaledSize': icon_size
+      },
+      "Classrooms": {
+        'url': "_/theme/ClassroomIcon.png",
+        'scaledSize': icon_size
+      },
+      "Academic & Culture": {
+        'url': "_/theme/BookIcon.png",
+        'scaledSize': icon_size
+      }
+    }
+
+    # 6. Loop and drop active markers
     for loc in self.locations:
       category = loc.get('category', '').strip()
       if category in active_categories:
+        chosen_icon = category_icons.get(category, "http://maps.google.com/mapfiles/ms/icons/red-dot.png")
+
         marker = anvil.GoogleMap.Marker(
           position=anvil.GoogleMap.LatLng(loc['lat'], loc['lng']),
-          title=loc['name']
+          title=loc['name'],
+          icon=chosen_icon
         )
+
         marker.tag = loc['desc']
         marker.add_event_handler("click", self.marker_click)
         self.map_campus.add_component(marker)
