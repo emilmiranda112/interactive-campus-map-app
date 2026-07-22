@@ -137,11 +137,11 @@ class Form1(Form1Template):
       active_categories.append("Classrooms")
 
     # 5. Define icons
-    icon_size = anvil.GoogleMap.Size(20, 20)
+    icon_size = anvil.GoogleMap.Size(30, 30)
 
     category_icons = {
       "Restrooms": {
-        'url': "_/theme/TransparentRestroomIcon.jpg",
+        'url': "_/theme/BlueRestroomIcon.png",
         'scaledSize': icon_size
       },
       "Sports": {
