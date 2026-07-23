@@ -5,9 +5,12 @@ import anvil.js
 
 class Form1(Form1Template):
   def __init__(self, **properties):
-    self.user_marker = None
     # Set up components and initialize form
     self.init_components(**properties)
+    
+    self.user_marker = None
+    self.location_checkboxes = {}
+    
 
     # 1. Apply your custom "Disney/Themed" style to the map face
     # Paste your Snazzy Maps JSON inside the brackets below
@@ -70,23 +73,21 @@ class Form1(Form1Template):
     # 3. Fetch dataset from DataParser backend
     self.locations = anvil.server.call('load_campus_data')
 
-    # 4. Generate initial markers
-    self.drop_map_markers()
-    self.start_user_tracking()
+    # 4. Populate Main Category Dropdown dynamically
+    categories = sorted(list(set(loc.get('category', '').strip() for loc in self.locations if loc.get('category'))))
+    self.drop_down_category.items = [("Select a category...", None)] + [(cat, cat) for cat in categories]
 
-  def start_user_tracking(self):
-    """Requests GPS permission and tracks the user's position live."""
+
+    def start_user_tracking(self):
+      """Requests GPS permission and tracks the user's position live."""
     geolocation = anvil.js.window.navigator.geolocation
 
     if geolocation:
-      # Options for high accuracy live GPS tracking
       options = {
         'enableHighAccuracy': True,
         'maximumAge': 0,
         'timeout': 10000
       }
-
-      # watchPosition updates automatically whenever the user moves!
       geolocation.watchPosition(
         self.update_user_location,
         self.handle_location_error,
@@ -106,7 +107,7 @@ class Form1(Form1Template):
       self.user_marker = anvil.GoogleMap.Marker(
         position=user_pos,
         title="You are here!",
-        icon="https://maps.google.com/mapfiles/ms/icons/blue-dot.png"  # Distinct blue pin
+        icon="https://maps.google.com/mapfiles/ms/icons/blue-dot.png"
       )
       self.map_campus.add_component(self.user_marker)
     else:
@@ -114,31 +115,51 @@ class Form1(Form1Template):
       self.user_marker.position = user_pos
 
   def handle_location_error(self, error, **event_args):
+    """Handles GPS permission denial or timeouts gracefully."""
     print("Could not retrieve user location:", error.message)
+    # 5. Draw initial map state & start GPS tracking
+    self.drop_map_markers()
+    self.start_user_tracking()
+
+  @handle("drop_down_category", "change")
+  def drop_down_category_change(self, **event_args):
+    """This method is called when an item is selected"""
+    """Triggered when user selects a category (e.g. Restrooms, Sports)"""
+    selected_cat = self.drop_down_category.selected_value
+
+    # Clear out previous sub-checkboxes
+    self.panel_sub_checkboxes.clear()
+    self.location_checkboxes = {}
+
+    if not selected_cat:
+      self.drop_map_markers()
+      return
+
+    for idx, loc in enumerate(self.locations):
+      if loc.get('category', '').strip() == selected_cat:
+        chk = anvil.CheckBox(text=loc['name'], checked=True)
+        chk.set_event_handler('change', self.individual_checkbox_change)
+
+        # Save reference using unique index `idx` as key
+        self.location_checkboxes[idx] = {'checkbox': chk, 'location': loc}
+        self.panel_sub_checkboxes.add_component(chk)
+
+    self.drop_map_markers()
+
+  def individual_checkbox_change(self, **event_args):
+    """Triggered whenever any sub-checkbox is checked or unchecked"""
+    self.drop_map_markers()
+
   def drop_map_markers(self):
-    # 1. Clear the map
+    # Clear canvas
     self.map_campus.clear()
 
-    # 2. Re-add live user location pin if active
+    # Re-add live GPS location pin if active
     if getattr(self, 'user_marker', None) is not None:
       self.map_campus.add_component(self.user_marker)
 
-    # 3. DEFINE ACTIVE_CATEGORIES FIRST (Fixes 'undefined' error!)
-    active_categories = []
-
-    # 4. Check state of each checkbox and add active ones
-    if self.check_box_academic.checked:
-      active_categories.append("Academic & Culture")
-    if self.check_box_sports.checked:
-      active_categories.append("Sports")
-    if self.check_box_restrooms.checked:
-      active_categories.append("Restrooms")
-    if self.check_box_classrooms.checked:
-      active_categories.append("Classrooms")
-
-    # 5. Define icons
+    # Define icon styles & sizes
     icon_size = anvil.GoogleMap.Size(35, 30)
-
     category_icons = {
       "Restrooms": {
         'url': "_/theme/BlueRestroomIcon.png",
@@ -158,10 +179,11 @@ class Form1(Form1Template):
       }
     }
 
-    # 6. Loop and drop active markers
-    for loc in self.locations:
-      category = loc.get('category', '').strip()
-      if category in active_categories:
+    # Only draw markers whose specific sub-checkbox IS checked!
+    for key, item in self.location_checkboxes.items():
+      if item['checkbox'].checked:
+        loc = item['location']
+        category = loc.get('category', '').strip()
         chosen_icon = category_icons.get(category, "http://maps.google.com/mapfiles/ms/icons/red-dot.png")
 
         marker = anvil.GoogleMap.Marker(
@@ -169,34 +191,11 @@ class Form1(Form1Template):
           title=loc['name'],
           icon=chosen_icon
         )
-
         marker.tag = loc['desc']
         marker.add_event_handler("click", self.marker_click)
         self.map_campus.add_component(marker)
-        
+
   def marker_click(self, sender, **event_args):
-    """Fires whenever the user clicks on a map marker pin."""
-    # 'sender' is the specific marker pin that was clicked!
-    # sender.title is the name, and sender.tag is the description.
+    """Fires when a marker pin is clicked"""
     alert(content=sender.tag, title=sender.title)
-
-  @handle("check_box_sports", "change")
-  def check_box_sports_change(self, **event_args):
-    """This method is called when this checkbox is checked or unchecked"""
-    self.drop_map_markers()
-
-  @handle("check_box_academic", "change")
-  def check_box_academics_change(self, **event_args):
-    """This method is called when this checkbox is checked or unchecked"""
-    self.drop_map_markers()
-
-  @handle("check_box_restrooms", "change")
-  def check_box_restrooms_change(self, **event_args):
-    """This method is called when this checkbox is checked or unchecked"""
-    self.drop_map_markers()
-
-  @handle("check_box_classrooms", "change")
-  def check_box_classrooms_change(self, **event_args):
-    """This method is called when this checkbox is checked or unchecked"""
-    self.drop_map_markers()
 

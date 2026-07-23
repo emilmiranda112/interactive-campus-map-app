@@ -21,48 +21,28 @@ components:
   name: content_panel
   properties: {col_widths: '{"TGIMXZ":60}'}
   type: ColumnPanel
-- layout_properties: {slot: nav-right}
+- components: []
+  layout_properties: {slot: nav-right}
   name: navbar_links
   properties: {}
   type: FlowPanel
-- components:
-  - components: []
-    layout_properties: {grid_position: 'DFMNJZ,KFNGXV'}
-    name: flow_panel_1
-    properties: {}
-    type: FlowPanel
-  - event_bindings: {}
-    layout_properties: {grid_position: 'PWTKQD,SCCSII'}
-    name: check_box_sports
-    properties: {checked: true, text: Sports}
-    type: CheckBox
-  - event_bindings: {}
-    layout_properties: {grid_position: 'WHEMCT,ACXFWB'}
-    name: check_box_academic
-    properties: {checked: true, text: Academic & Culture}
-    type: CheckBox
-  - event_bindings: {}
-    layout_properties: {grid_position: 'NDYSJB,QKOKXE'}
-    name: check_box_restrooms
-    properties: {checked: true, text: Restrooms}
-    type: CheckBox
-  - event_bindings: {}
-    layout_properties: {grid_position: 'XWASXL,MNNRBL'}
-    name: check_box_classrooms
-    properties: {checked: true, text: Clasrooms}
-    type: CheckBox
-  - layout_properties: {grid_position: 'MONTYB,KQLVQN'}
-    name: check_box_5
-    properties: {text: check_box_5}
-    type: CheckBox
-  layout_properties: {slot: left-nav}
-  name: column_panel_1
-  properties: {}
-  type: ColumnPanel
 - layout_properties: {slot: title}
   name: text_box_1
   properties: {background: white, enabled: false, foreground: '#000000', text: Places, visible: true}
   type: TextBox
+- components:
+  - layout_properties: {grid_position: 'OEZGCY,ADRMFM'}
+    name: drop_down_category
+    properties: {}
+    type: DropDown
+  - layout_properties: {grid_position: 'BBSCQO,NYQCLJ'}
+    name: panel_sub_checkboxes
+    properties: {}
+    type: ColumnPanel
+  layout_properties: {slot: left-nav}
+  name: column_panel_1
+  properties: {}
+  type: ColumnPanel
 container:
   properties: {html: '@theme:standard-page.html'}
   type: HtmlTemplate
