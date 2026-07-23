@@ -1046,3 +1046,26 @@ div.plot-container.plotly svg.main-svg {
 .anvil-spinner {
     --anvil-spinner-bg: %color:Surface Variant%;
 }
+.anvil-navbar {
+  background-color: #800020 !important; /* RBV Maroon */
+}
+/* Make top navigation bar span full width in maroon */
+.anvil-navbar {
+  background-color: #800020 !important;
+  min-height: 65px !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+/* Ensure the app title area isn't squished */
+.app-title {
+  width: 100% !important;
+}
+/* White text for all checkboxes inside panel_sub_checkboxes */
+.anvil-checkbox {
+  color: #ffffff !important;
+}
+
+.anvil-checkbox span {
+  color: #ffffff !important;
+}
