@@ -2,11 +2,12 @@ components:
 - components:
   - layout_properties: {grid_position: 'SFJOXQ,NBRQUD'}
     name: dropdown_locations
-    properties: {background: '', foreground: 'theme:Primary', placeholder: Select a campus landmark...}
+    properties: {background: 'theme:Primary Container', foreground: 'theme:Primary', placeholder: Search a campus landmark...}
     type: TextBox
   - layout_properties: {grid_position: 'SFJOXQ,TSEQRQ'}
     name: btn_go
     properties:
+      background: theme:Primary Container
       icon: fa:map-pin
       spacing:
         margin: [null, null, null, 0]
@@ -17,16 +18,22 @@ components:
     name: map_campus
     properties: {height: 75vh}
     type: GoogleMap
+  data_bindings:
+  - {code: 'self.item[''black'']', property: border, writeback: false}
   layout_properties: {slot: default}
   name: content_panel
-  properties: {col_widths: '{"TGIMXZ":60}'}
+  properties:
+    background: theme:Primary
+    border: black
+    col_widths: '{"TGIMXZ":60}'
+    spacing:
+      margin: [0, null, null, null]
   type: ColumnPanel
-- components: []
-  layout_properties: {slot: nav-right}
-  name: navbar_links
-  properties: {}
-  type: FlowPanel
 - components:
+  - layout_properties: {grid_position: 'EOLYMF,NFAJYI'}
+    name: text_box_1
+    properties: {background: 'theme:Primary Container', enabled: false, font: '', foreground: 'theme:Primary', text: Filter Landmarks}
+    type: TextBox
   - layout_properties: {grid_position: 'OEZGCY,ADRMFM'}
     name: drop_down_category
     properties: {background: white, foreground: 'theme:Primary'}
@@ -35,6 +42,10 @@ components:
     name: panel_sub_checkboxes
     properties: {}
     type: ColumnPanel
+  - layout_properties: {grid_position: 'PBNESU,VEPSSO'}
+    name: spacer_2
+    properties: {height: '1000.0751953125'}
+    type: Spacer
   layout_properties: {slot: left-nav}
   name: column_panel_1
   properties: {background: 'theme:Primary'}
@@ -46,7 +57,7 @@ components:
     type: Image
   - layout_properties: {expand: true}
     name: label_1
-    properties: {background: '', foreground: 'theme:Primary Container', text: Ranch Buena Vista High School - Interactive Campus Map}
+    properties: {background: '', foreground: 'theme:Primary Container', text: RBV - Interactive Campus Map}
     type: Label
   layout_properties: {slot: title}
   name: flow_panel_1
