@@ -137,7 +137,12 @@ class Form1(Form1Template):
 
     for idx, loc in enumerate(self.locations):
       if loc.get('category', '').strip() == selected_cat:
-        chk = anvil.CheckBox(text=loc['name'], checked=True)
+        chk = anvil.CheckBox(
+          text=loc['name'], 
+          checked=True, 
+          foreground="white"
+        )
+        
         chk.set_event_handler('change', self.individual_checkbox_change)
 
         # Save reference using unique index `idx` as key

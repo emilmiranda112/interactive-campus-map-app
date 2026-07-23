@@ -1069,3 +1069,9 @@ div.plot-container.plotly svg.main-svg {
 .anvil-checkbox span {
   color: #ffffff !important;
 }
+/* Force all checkbox and checklist labels to white */
+.anvil-checkbox,
+.anvil-checkbox label,
+.anvil-checkbox span {
+  color: #ffffff !important;
+}
