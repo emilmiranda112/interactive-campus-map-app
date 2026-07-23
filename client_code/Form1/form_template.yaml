@@ -2,7 +2,7 @@ components:
 - components:
   - layout_properties: {grid_position: 'SFJOXQ,NBRQUD'}
     name: dropdown_locations
-    properties: {background: 'theme:Primary Container', foreground: 'theme:Primary', placeholder: Search a campus landmark...}
+    properties: {background: 'theme:Primary Container', foreground: 'theme:Primary', placeholder: Search campus landmarks...}
     type: TextBox
   - layout_properties: {grid_position: 'SFJOXQ,TSEQRQ'}
     name: btn_go
@@ -57,7 +57,7 @@ components:
     type: Image
   - layout_properties: {expand: true}
     name: label_1
-    properties: {background: '', foreground: 'theme:Primary Container', text: RBV - Interactive Campus Map}
+    properties: {background: '', foreground: 'theme:Primary Container', text: 'RBV - Interactive Campus Map               '}
     type: Label
   layout_properties: {slot: title}
   name: flow_panel_1
