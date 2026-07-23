@@ -160,6 +160,106 @@ class Form1(Form1Template):
 
     self.drop_map_markers()
 
+  @handle("text_box_search", "change")
+  def text_box_search_change(self, **event_args):
+    """Shows a drop-down list of search results as the user types"""
+    query = self.text_box_search.text.lower().strip() if self.text_box_search.text else ""
+
+    # Clear the suggestions list panel
+    self.panel_search_results.clear()
+
+    # If search box is empty, hide suggestions and restore category filter
+    if not query:
+      self.panel_search_results.visible = False
+      self.drop_down_category_change()
+      return
+
+    self.panel_search_results.visible = True
+    matches_found = 0
+
+    for idx, loc in enumerate(self.locations):
+      location_name = loc.get('name', '').lower()
+
+      if query in location_name:
+        matches_found += 1
+        # Create a clickable Link for each matching result
+        link = anvil.Link(text=loc['name'], foreground="white", role="search-result")
+
+        # When clicked, highlight this exact location with its custom interactive marker
+        link.set_event_handler('click', lambda loc=loc, **ea: self.select_search_location(loc))
+
+        self.panel_search_results.add_component(link)
+
+        # Limit to top 5 results so mobile screens aren't cluttered
+        if matches_found >= 5:
+          break
+
+  def select_search_location(self, loc):
+    """Called when user clicks a search result from the dropdown list"""
+    # 1. Hide search results list & clear query
+    if hasattr(self, 'panel_search_results'):
+      self.panel_search_results.clear()
+      self.panel_search_results.visible = False
+
+    # 2. Clear existing map pins
+    self.map_campus.clear()
+
+    # 3. Safely extract coordinates (handles floats, strings, or missing keys)
+    lat = float(loc.get('lat') or loc.get('latitude') or 0)
+    lng = float(loc.get('lng') or loc.get('longitude') or loc.get('long') or 0)
+
+    # 4. Drop the interactive marker
+    self.drop_single_interactive_marker(loc)
+
+    # 5. Zoom and center map on selected landmark
+    if lat != 0 and lng != 0:
+      self.map_campus.center = GoogleMap.LatLng(lat, lng)
+      self.map_campus.zoom = 17
+
+  def drop_single_interactive_marker(self, loc):
+    """Creates and drops a single custom interactive marker"""
+    # Extract coordinates
+    lat = float(loc.get('lat') or loc.get('latitude') or 0)
+    lng = float(loc.get('lng') or loc.get('longitude') or loc.get('long') or 0)
+
+    if lat == 0 or lng == 0:
+      return
+
+    name = loc.get('name') or loc.get('title') or "Campus Location"
+
+    # Handle custom icon (supports URL strings, file assets, or Data Table media objects)
+    icon_val = loc.get('icon') or loc.get('icon_url')
+    icon_url = None
+
+    if isinstance(icon_val, str):
+      icon_url = icon_val
+    elif hasattr(icon_val, 'url'):  # If stored as a Media Object in Data Tables
+      icon_url = icon_val.url
+
+    # Construct Google Map Marker
+    marker_kwargs = {
+      'position': GoogleMap.LatLng(lat, lng),
+      'title': name
+    }
+    if icon_url:
+      marker_kwargs['icon'] = icon_url
+
+    marker = GoogleMap.Marker(**marker_kwargs)
+
+    # Attach click handler safely if marker_click method exists
+    if hasattr(self, 'marker_click'):
+      marker.set_event_handler('click', lambda **ea: self.marker_click(loc))
+
+    self.map_campus.add_component(marker)
+
+
+
+  
+  @handle("text_box_search", "pressed_enter")
+  def text_box_search_pressed_enter(self, **event_args):
+    """Triggers search when Enter is pressed"""
+    self.text_box_search_change(**event_args)
+
   def individual_checkbox_change(self, **event_args):
     """Triggered whenever any sub-checkbox is checked or unchecked"""
     self.drop_map_markers()
@@ -213,3 +313,4 @@ class Form1(Form1Template):
     """Fires when a marker pin is clicked"""
     alert(content=sender.tag, title=sender.title)
 
+  

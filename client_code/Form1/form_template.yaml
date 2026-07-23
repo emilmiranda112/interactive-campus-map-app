@@ -1,19 +1,13 @@
 components:
 - components:
   - layout_properties: {grid_position: 'SFJOXQ,NBRQUD'}
-    name: dropdown_locations
+    name: text_box_search
     properties: {background: 'theme:Primary Container', foreground: 'theme:Primary', placeholder: Search campus landmarks...}
     type: TextBox
-  - layout_properties: {grid_position: 'SFJOXQ,TSEQRQ'}
-    name: btn_go
-    properties:
-      background: theme:Primary Container
-      icon: fa:map-pin
-      spacing:
-        margin: [null, null, null, 0]
-      text: |
-        Go!
-    type: Button
+  - layout_properties: {grid_position: 'PVZKKQ,SAHYMU'}
+    name: panel_search_results
+    properties: {background: '', foreground: 'theme:Primary'}
+    type: FlowPanel
   - layout_properties: {full_width_row: true, grid_position: 'OHXBUG,TGIMXZ'}
     name: map_campus
     properties: {height: 75vh}
