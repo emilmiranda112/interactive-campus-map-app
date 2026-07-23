@@ -7,6 +7,15 @@ class Form1(Form1Template):
   def __init__(self, **properties):
     # Set up components and initialize form
     self.init_components(**properties)
+
+    # 1. Stretch the top panel across the full screen
+    self.flow_panel_1.role = 'full-width-row'  # Forces full-width stretching
+
+    # 2. Make the left sidebar background maroon
+    self.panel_sub_checkboxes.background = "#800020"
+
+    # 3. If your left column/container has a name (e.g. column_panel_1), color it too:
+    # self.column_panel_1.background = "#800020"
     
     self.user_marker = None
     self.location_checkboxes = {}

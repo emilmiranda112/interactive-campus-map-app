@@ -44,7 +44,7 @@ components:
     name: image_1
     properties: {display_mode: zoom_to_fill, height: '89.237060546875', source: _/theme/logo.png}
     type: Image
-  - layout_properties: {}
+  - layout_properties: {expand: true}
     name: label_1
     properties: {background: '', foreground: 'theme:Primary Container', text: Ranch Buena Vista High School - Interactive Campus Map}
     type: Label
@@ -55,6 +55,7 @@ components:
     background: theme:Primary
     foreground: theme:Primary Container
     gap: tiny
+    role: null
     spacing:
       margin: [2, 15, null, 0]
     vertical_align: middle
