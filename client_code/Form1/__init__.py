@@ -21,58 +21,7 @@ class Form1(Form1Template):
     self.location_checkboxes = {}
     
 
-    # 1. Apply your custom "Disney/Themed" style to the map face
-    # Paste your Snazzy Maps JSON inside the brackets below
-    custom_map_style = [
-      {
-        "featureType": "landscape",
-        "elementType": "geometry.fill",
-        "stylers": [
-          {
-            "color": "#fcfcfc"
-          }
-        ]
-      },
-      {
-        "featureType": "poi",
-        "elementType": "labels",
-        "stylers": [
-          {
-            "color": "#8b8484"
-          },
-          {
-            "visibility": "off"
-          }
-        ]
-      },
-      {
-        "featureType": "poi.business",
-        "elementType": "labels",
-        "stylers": [
-          {
-            "visibility": "off"
-          }
-        ]
-      },
-      {
-        "featureType": "road",
-        "elementType": "geometry.fill",
-        "stylers": [
-          {
-            "color": "#c7b8b8"
-          }
-        ]
-      },
-      {
-        "featureType": "water",
-        "elementType": "geometry.fill",
-        "stylers": [
-          {
-            "color": "#3c3939"
-          }
-        ]
-      }
-    ]
+    
     #self.map_campus.map_type_id = 'satellite'
     # 2. Keep map centered on your specific hardcoded location
     self.map_campus.center = anvil.GoogleMap.LatLng(33.163395832473206, -117.24753965466618)
@@ -195,26 +144,36 @@ class Form1(Form1Template):
           break
 
   def select_search_location(self, loc):
-    """Called when user clicks a search result from the dropdown list"""
-    # 1. Hide search results list & clear query
-    if hasattr(self, 'panel_search_results'):
-      self.panel_search_results.clear()
-      self.panel_search_results.visible = False
-
-    # 2. Clear existing map pins
+    """Called when user taps an item from the search dropdown"""
+    self.panel_search_results.clear()
+    self.panel_search_results.visible = False
     self.map_campus.clear()
 
-    # 3. Safely extract coordinates (handles floats, strings, or missing keys)
+    # Safely retrieve coordinates without direct dictionary indexing
     lat = float(loc.get('lat') or loc.get('latitude') or 0)
     lng = float(loc.get('lng') or loc.get('longitude') or loc.get('long') or 0)
 
-    # 4. Drop the interactive marker
-    self.drop_single_interactive_marker(loc)
-
-    # 5. Zoom and center map on selected landmark
     if lat != 0 and lng != 0:
+      # Create marker
+      marker = GoogleMap.Marker(
+        position=GoogleMap.LatLng(lat, lng)
+      )
+
+      # Attach your marker click handler
+      marker.set_event_handler('click', self.marker_click)
+
+      # Add to map and adjust camera
+      self.map_campus.add_component(marker)
       self.map_campus.center = GoogleMap.LatLng(lat, lng)
       self.map_campus.zoom = 19
+
+    # Safely update side panel elements using .get()
+    if hasattr(self, 'label_name'):
+      self.label_name.text = loc.get('name') or loc.get('title') or ''
+    if hasattr(self, 'label_description'):
+      self.label_description.text = loc.get('description') or ''
+    if hasattr(self, 'image_location') and loc.get('image'):
+      self.image_location.source = loc.get('image')
 
   def drop_single_interactive_marker(self, loc):
     """Creates and drops a single custom interactive marker"""
@@ -273,11 +232,11 @@ class Form1(Form1Template):
       self.map_campus.add_component(self.user_marker)
 
     # Define icon styles & sizes
-    icon_size = anvil.GoogleMap.Size(35, 30)
+    icon_size = anvil.GoogleMap.Size(30, 30)
     category_icons = {
       "Restrooms": {
         'url': "_/theme/BlueRestroomIcon.png",
-        'scaledSize': icon_size
+        'scaledSize': anvil.GoogleMap.Size(35, 30)
       },
       "Sports": {
         'url': "_/theme/RunningIcon.png",
@@ -290,7 +249,16 @@ class Form1(Form1Template):
       "Academic & Culture": {
         'url': "_/theme/BookIcon.png",
         'scaledSize': icon_size
+      },
+      "Cafeteria": {
+      'url': "_/theme/RestaurantIcon.png",
+      'scaledSize': icon_size
+      },
+    "Parking": {
+      'url': "_/theme/ParkingIcon.png",
+      'scaledSize': icon_size
       }
+      
     }
 
     # Only draw markers whose specific sub-checkbox IS checked!
