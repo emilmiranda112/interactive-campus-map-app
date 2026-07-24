@@ -239,8 +239,8 @@ class Form1(Form1Template):
         'scaledSize': anvil.GoogleMap.Size(35, 30)
       },
       "Sports": {
-        'url': "_/theme/RunningIcon.png",
-        'scaledSize': anvil.GoogleMap.Size(50, 50)
+        'url': "_/theme/RunIcon.png",
+        'scaledSize': anvil.GoogleMap.Size(30, 30)
       },
       "Classrooms": {
         'url': "_/theme/ClassroomIcon.png",
@@ -251,12 +251,16 @@ class Form1(Form1Template):
         'scaledSize': icon_size
       },
       "Cafeteria": {
-      'url': "_/theme/RestaurantIcon.png",
+      'url': "_/theme/FoodIcon.png",
       'scaledSize': icon_size
       },
     "Parking": {
       'url': "_/theme/ParkingIcon.png",
       'scaledSize': icon_size
+      },
+      "Office and Facilities": {
+        'url': "_/theme/OfficeIcon.png",
+        'scaledSize': icon_size
       }
       
     }
