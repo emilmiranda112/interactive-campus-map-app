@@ -73,7 +73,7 @@ class Form1(Form1Template):
         ]
       }
     ]
-    self.map_campus.map_type_id = 'satellite'
+    #self.map_campus.map_type_id = 'satellite'
     # 2. Keep map centered on your specific hardcoded location
     self.map_campus.center = anvil.GoogleMap.LatLng(33.163395832473206, -117.24753965466618)
     self.map_campus.zoom = 17
@@ -214,7 +214,7 @@ class Form1(Form1Template):
     # 5. Zoom and center map on selected landmark
     if lat != 0 and lng != 0:
       self.map_campus.center = GoogleMap.LatLng(lat, lng)
-      self.map_campus.zoom = 17
+      self.map_campus.zoom = 19
 
   def drop_single_interactive_marker(self, loc):
     """Creates and drops a single custom interactive marker"""
