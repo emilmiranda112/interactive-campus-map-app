@@ -1,5 +1,9 @@
 components:
 - components:
+  - layout_properties: {grid_position: 'BIVQFI,QANLVK', row_background: ''}
+    name: spacer_1
+    properties: {height: '1'}
+    type: Spacer
   - layout_properties: {grid_position: 'SFJOXQ,NBRQUD'}
     name: text_box_search
     properties: {background: 'theme:Primary Container', foreground: 'theme:Primary', placeholder: Search campus landmarks...}
@@ -12,8 +16,7 @@ components:
     name: map_campus
     properties: {height: 75vh, max_zoom: 21}
     type: GoogleMap
-  data_bindings:
-  - {code: 'self.item[''black'']', property: border, writeback: false}
+  data_bindings: []
   layout_properties: {slot: default}
   name: content_panel
   properties:
@@ -42,7 +45,7 @@ components:
     type: Spacer
   layout_properties: {slot: left-nav}
   name: column_panel_1
-  properties: {background: 'theme:Primary'}
+  properties: {background: 'theme:Primary', border: ''}
   type: ColumnPanel
 - components:
   - layout_properties: {width: 104.967478515625}
