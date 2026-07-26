@@ -332,4 +332,5 @@ class Form1(Form1Template):
     """Deselects all items in the current category."""
     self.deselect_current_category()
 
+ 
   

@@ -16,6 +16,7 @@ components:
     name: btn_clear_all_click
     properties:
       background: white
+      icon: fa:repeat
       text: |
         Clear Map
     type: Button
@@ -40,11 +41,11 @@ components:
     type: TextBox
   - layout_properties: {grid_position: 'RSNXXV,TEBLVX'}
     name: btn_select_all_click
-    properties: {background: white, text: Select All Category}
+    properties: {background: white, icon: 'fa:check', text: Select All Category}
     type: Button
   - layout_properties: {grid_position: 'MDRAKR,FLLGGF'}
     name: btn_deselect_category
-    properties: {background: white, text: Deselect All Category}
+    properties: {background: white, icon: 'fa:window-close', text: Deselect All Category}
     type: Button
   - layout_properties: {grid_position: 'OEZGCY,ADRMFM'}
     name: drop_down_category
