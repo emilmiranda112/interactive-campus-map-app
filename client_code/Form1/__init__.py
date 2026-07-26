@@ -20,8 +20,6 @@ class Form1(Form1Template):
     self.user_marker = None
     self.location_checkboxes = {}
     
-
-    
     #self.map_campus.map_type_id = 'satellite'
     # 2. Keep map centered on your specific hardcoded location
     self.map_campus.center = anvil.GoogleMap.LatLng(33.163395832473206, -117.24753965466618)
@@ -244,7 +242,7 @@ class Form1(Form1Template):
       },
       "Sports": {
         'url': "_/theme/RunIcon.png",
-        'scaledSize': anvil.GoogleMap.Size(30, 30)
+        'scaledSize': icon_size
       },
       "Classrooms": {
         'url': "_/theme/ClassroomIcon.png",
@@ -326,7 +324,7 @@ class Form1(Form1Template):
 
   @handle("btn_clear_all_click", "click")
   def btn_clear_all_click_click(self, **event_args):
-    """Triggered when Clear All / Unselect All button is clicked."""
+    """Triggered when Clear Map button is clicked."""
     self.clear_all_markers()
 
   @handle("btn_deselect_category", "click")
