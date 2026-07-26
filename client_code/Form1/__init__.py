@@ -81,13 +81,11 @@ class Form1(Form1Template):
 
   @handle("drop_down_category", "change")
   def drop_down_category_change(self, **event_args):
-    """This method is called when an item is selected"""
-    """Triggered when user selects a category (e.g. Restrooms, Sports)"""
+    """Triggered when user selects a category (e.g., Restrooms, Sports)"""
     selected_cat = self.drop_down_category.selected_value
 
-    # Clear out previous sub-checkboxes
+    # Clear ONLY the sub-checkbox UI panel (do not clear self.location_checkboxes)
     self.panel_sub_checkboxes.clear()
-    self.location_checkboxes = {}
 
     if not selected_cat:
       self.drop_map_markers()
@@ -95,18 +93,26 @@ class Form1(Form1Template):
 
     for idx, loc in enumerate(self.locations):
       if loc.get('category', '').strip() == selected_cat:
-        chk = anvil.CheckBox(
-          text=loc['name'], 
-          checked=True, 
-          foreground="white"
-        )
-        
-        chk.set_event_handler('change', self.individual_checkbox_change)
 
-        # Save reference using unique index `idx` as key
-        self.location_checkboxes[idx] = {'checkbox': chk, 'location': loc}
+        # Check if we already created a checkbox for this location
+        if idx in self.location_checkboxes:
+          chk = self.location_checkboxes[idx]['checkbox']
+        else:
+          # First time seeing this location, create a new CheckBox
+          chk = anvil.CheckBox(
+            text=loc['name'],
+            checked=True,
+            foreground="white"
+          )
+          chk.set_event_handler('change', self.individual_checkbox_change)
+
+          # Store it permanently in our tracking dictionary
+          self.location_checkboxes[idx] = {'checkbox': chk, 'location': loc}
+
+          # Add the checkbox to the active category UI panel
         self.panel_sub_checkboxes.add_component(chk)
 
+    # Refresh markers so all currently checked items across categories display
     self.drop_map_markers()
 
   @handle("text_box_search", "change")
@@ -211,8 +217,6 @@ class Form1(Form1Template):
 
     self.map_campus.add_component(marker)
 
-
-
   
   @handle("text_box_search", "pressed_enter")
   def text_box_search_pressed_enter(self, **event_args):
@@ -284,5 +288,50 @@ class Form1(Form1Template):
   def marker_click(self, sender, **event_args):
     """Fires when a marker pin is clicked"""
     alert(content=sender.tag, title=sender.title)
+
+
+  
+  def select_current_category(self, select_state=True):
+    """Checks or unchecks ONLY the items in the active category dropdown."""
+    current_cat = self.drop_down_category.selected_value
+    if not current_cat:
+      return
+
+    for item in self.location_checkboxes.values():
+      if item['location'].get('category', '').strip() == current_cat:
+        item['checkbox'].checked = select_state
+
+    self.drop_map_markers()
+
+
+  def deselect_current_category(self):
+    """Unchecks ONLY the items in the currently active category."""
+    self.select_current_category(select_state=False)
+  
+
+  def clear_all_markers(self):
+    """Unchecks ALL checkboxes across ALL categories and wipes the map."""
+    for item in self.location_checkboxes.values():
+      item['checkbox'].checked = False
+
+    # Redraw the map (which will now draw 0 markers)
+    self.drop_map_markers()
+    
+
+  @handle("btn_select_all_click", "click")
+  def btn_select_all_click_click(self, **event_args):
+    """Triggered when Select All Category button is clicked."""
+    self.select_current_category(True)
+  
+
+  @handle("btn_clear_all_click", "click")
+  def btn_clear_all_click_click(self, **event_args):
+    """Triggered when Clear All / Unselect All button is clicked."""
+    self.clear_all_markers()
+
+  @handle("btn_deselect_category", "click")
+  def btn_deselect_category_click(self, **event_args):
+    """Deselects all items in the current category."""
+    self.deselect_current_category()
 
   
