@@ -153,35 +153,26 @@ class Form1(Form1Template):
     self.panel_search_results.visible = False
     self.map_campus.clear()
 
-    # Safely retrieve coordinates without direct dictionary indexing
+    # Delegate interactive marker creation
+    self.drop_single_interactive_marker(loc)
+
+    # Adjust map camera center & zoom safely
     lat = float(loc.get('lat') or loc.get('latitude') or 0)
     lng = float(loc.get('lng') or loc.get('longitude') or loc.get('long') or 0)
-
     if lat != 0 and lng != 0:
-      # Create marker
-      marker = GoogleMap.Marker(
-        position=GoogleMap.LatLng(lat, lng)
-      )
-
-      # Attach your marker click handler
-      marker.set_event_handler('click', self.marker_click)
-
-      # Add to map and adjust camera
-      self.map_campus.add_component(marker)
       self.map_campus.center = GoogleMap.LatLng(lat, lng)
       self.map_campus.zoom = 19
 
-    # Safely update side panel elements using .get()
+    # Safely update side panel elements
     if hasattr(self, 'label_name'):
       self.label_name.text = loc.get('name') or loc.get('title') or ''
     if hasattr(self, 'label_description'):
-      self.label_description.text = loc.get('description') or ''
+      self.label_description.text = loc.get('description') or loc.get('desc') or ''
     if hasattr(self, 'image_location') and loc.get('image'):
       self.image_location.source = loc.get('image')
 
   def drop_single_interactive_marker(self, loc):
     """Creates and drops a single custom interactive marker"""
-    # Extract coordinates
     lat = float(loc.get('lat') or loc.get('latitude') or 0)
     lng = float(loc.get('lng') or loc.get('longitude') or loc.get('long') or 0)
 
@@ -189,17 +180,16 @@ class Form1(Form1Template):
       return
 
     name = loc.get('name') or loc.get('title') or "Campus Location"
+    desc = loc.get('description') or loc.get('desc') or "No description available."
 
-    # Handle custom icon (supports URL strings, file assets, or Data Table media objects)
+    # Handle custom icon logic...
     icon_val = loc.get('icon') or loc.get('icon_url')
     icon_url = None
-
     if isinstance(icon_val, str):
       icon_url = icon_val
-    elif hasattr(icon_val, 'url'):  # If stored as a Media Object in Data Tables
+    elif hasattr(icon_val, 'url'):
       icon_url = icon_val.url
 
-    # Construct Google Map Marker
     marker_kwargs = {
       'position': GoogleMap.LatLng(lat, lng),
       'title': name
@@ -209,9 +199,12 @@ class Form1(Form1Template):
 
     marker = GoogleMap.Marker(**marker_kwargs)
 
-    # Attach click handler safely if marker_click method exists
+    # ATTACH THE DESCRIPTION TAG HERE:
+    marker.tag = desc
+
+    # Attach click handler
     if hasattr(self, 'marker_click'):
-      marker.set_event_handler('click', lambda **ea: self.marker_click(loc))
+      marker.set_event_handler('click', self.marker_click)
 
     self.map_campus.add_component(marker)
 
@@ -263,9 +256,13 @@ class Form1(Form1Template):
       "Office and Facilities": {
         'url': "_/theme/OfficeIcon.png",
         'scaledSize': icon_size
-      }
-      
+      },
+      "200's Quad": "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
+      "300's Quad": "http://maps.google.com/mapfiles/ms/icons/orange-dot.png",
+      "700's Quad": "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png",
     }
+      
+    
 
     # Only draw markers whose specific sub-checkbox IS checked!
     for key, item in self.location_checkboxes.items():
