@@ -9,7 +9,7 @@ An interactive, mobile-responsive web application designed to help students, sta
 * **Mobile-Responsive(Finished):** Optimized UI/UX designed to work flawlessly on both desktop monitors and smartphones.
 
 ## 🛠️ Tech Stack
-* **Frontend & Backend:** [Anvil.works]([Live app link - pending deployment]) (Full-stack Python Web Framework)
+* **Frontend & Backend:** [Anvil.works]([https://tinyurl.com/rbv-campus-map]) (Full-stack Python Web Framework)
 * **API:** Google Maps JavaScript API
 * **Version Control:** GitHub
 
