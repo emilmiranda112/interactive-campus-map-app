@@ -1090,3 +1090,16 @@ div[anvil-name="content_panel"] { /* Replace card_1 with your container's Name *
   width: 100% !important;
   overflow: hidden !important;
 }
+
+/* Position the search & menu panel over the map */
+div[anvil-name="floating_menu"] {
+  position: absolute !important;
+  top: 15px !important;       /* Places it near the top of the map screen */
+  left: 15px !important;
+  right: 15px !important;
+  z-index: 999 !important;     /* Forces it to float above Google Maps */
+  background: white !important;
+  border-radius: 12px !important;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.25) !important;
+  padding: 10px !important;
+}

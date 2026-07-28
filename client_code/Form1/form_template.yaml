@@ -9,33 +9,17 @@ components:
       name: panel_search_results
       properties: {background: '', border: '', foreground: 'theme:Primary'}
       type: FlowPanel
-    - layout_properties: {grid_position: 'QBAIIY,IUIAKK'}
-      name: btn_select_all_click
-      properties: {background: white, icon: 'fa:check', text: Select All Category}
-      type: Button
-    - layout_properties: {grid_position: 'FJLTMQ,GYLEJR'}
-      name: btn_deselect_category
-      properties: {background: white, icon: 'fa:window-close', text: Deselect All Category}
-      type: Button
     layout_properties: {grid_position: 'PCOBRM,MLYGKV'}
     name: column_panel_2
     properties: {}
     type: ColumnPanel
-  - layout_properties: {grid_position: 'ATWFTW,ASVWVK'}
-    name: btn_clear_all_click
-    properties:
-      background: white
-      icon: fa:repeat
-      text: |
-        Clear Map
-    type: Button
   - layout_properties: {grid_position: 'BIVQFI,QANLVK', row_background: ''}
     name: spacer_1
     properties: {height: '1'}
     type: Spacer
   - layout_properties: {full_width_row: true, grid_position: 'OHXBUG,TGIMXZ'}
     name: map_campus
-    properties: {height: 100vh, max_zoom: 22}
+    properties: {height: 75vh, max_zoom: 22}
     type: GoogleMap
   data_bindings: []
   layout_properties: {slot: default}
@@ -52,6 +36,22 @@ components:
     name: text_box_1
     properties: {background: 'theme:Primary Container', border: 4px solid grey, enabled: false, font: '', foreground: 'theme:Primary', text: Filter Landmarks}
     type: TextBox
+  - layout_properties: {grid_position: 'RSNXXV,TEBLVX'}
+    name: btn_select_all_click
+    properties: {background: white, icon: 'fa:check', text: Select All Category}
+    type: Button
+  - layout_properties: {grid_position: 'MDRAKR,FLLGGF'}
+    name: btn_deselect_category
+    properties: {background: white, icon: 'fa:window-close', text: Deselect All Category}
+    type: Button
+  - layout_properties: {grid_position: 'EKHCED,KZRXFJ'}
+    name: btn_clear_all_click
+    properties:
+      background: white
+      icon: fa:repeat
+      text: |
+        Clear Map
+    type: Button
   - layout_properties: {grid_position: 'OEZGCY,ADRMFM'}
     name: drop_down_category
     properties: {background: white, border: '', foreground: 'theme:Primary'}
