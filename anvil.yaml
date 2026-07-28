@@ -1,4 +1,11 @@
 allow_embedding: false
+db_schema:
+  table_1:
+    client: none
+    columns: []
+    indexes: []
+    server: full
+    title: Table 1
 dependencies: []
 name: Interactive Campus Map
 package_name: Interactive_Campus_Map
