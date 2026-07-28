@@ -11,6 +11,12 @@ class Form1(Form1Template):
     # Set up components and initialize form
     self.init_components(**properties)
 
+    #Hide street view button
+    self.map_campus.street_view_control = False
+    
+    #Enable single finger scroll
+    self.map_campus.gesture_handling = 'greedy'
+
     # 1. Stretch the top panel across the full screen
     self.flow_panel_1.role = 'full-width-row'  # Forces full-width stretching
 

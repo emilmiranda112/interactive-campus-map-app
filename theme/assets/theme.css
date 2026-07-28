@@ -1075,3 +1075,18 @@ div.plot-container.plotly svg.main-svg {
 .anvil-checkbox span {
   color: #ffffff !important;
 }
+
+/* Prevent full page scrolling on mobile */
+html, body {
+  overflow: hidden !important;
+  height: 100% !important;
+  position: fixed;
+  width: 100%;
+}
+
+/* Target the container holding the map */
+div[anvil-name="content_panel"] { /* Replace card_1 with your container's Name */
+  height: calc(100vh - 140px) !important;
+  width: 100% !important;
+  overflow: hidden !important;
+}
