@@ -42,10 +42,10 @@ components:
       margin: [0, null, null, null]
   type: ColumnPanel
 - components:
-  - layout_properties: {grid_position: 'EOLYMF,NFAJYI'}
-    name: text_box_1
-    properties: {background: 'theme:Primary Container', border: 4px solid grey, enabled: false, font: '', foreground: 'theme:Primary', text: Filter Landmarks}
-    type: TextBox
+  - layout_properties: {grid_position: 'ZZVRGR,GITJCU'}
+    name: btn_toggle_filters
+    properties: {background: 'theme:Primary Container', text: ▲ Places & Filters}
+    type: Button
   - layout_properties: {grid_position: 'RSNXXV,TEBLVX'}
     name: btn_select_all_click
     properties: {background: white, icon: 'fa:check', text: Select All Category}
@@ -67,8 +67,8 @@ components:
     properties: {height: '1000.0751953125'}
     type: Spacer
   layout_properties: {slot: left-nav}
-  name: column_panel_1
-  properties: {background: 'theme:Primary', border: 4px solid black}
+  name: panel_filters
+  properties: {background: 'theme:Primary', border: 4px solid black, visible: true}
   type: ColumnPanel
 - components:
   - layout_properties: {width: 104.967478515625}
@@ -94,6 +94,7 @@ components:
     visible: false
   type: FlowPanel
 container:
+  data_bindings: []
   properties: {background: '', border: '', foreground: '', html: '@theme:standard-page.html', visible: true}
   type: HtmlTemplate
 is_package: true
