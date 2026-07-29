@@ -5,19 +5,10 @@ name: Interactive Campus Map
 native_deps:
   head_html: |-
     <script>
-      function restrictMapBounds(anvilMapComponent, north, south, east, west) {
+      function setMapId(anvilMapComponent, mapId) {
         if (anvilMapComponent && anvilMapComponent._map) {
           anvilMapComponent._map.setOptions({
-            restriction: {
-              latLngBounds: {
-                north: north,
-                south: south,
-                east: east,
-                west: west
-              },
-              strictBounds: true // Prevents bouncing or dragging outside
-            },
-            minZoom: 15 // Prevents zooming out too far
+            mapId: mapId
           });
         }
       }

@@ -336,15 +336,8 @@ class Form1(Form1Template):
     """Deselects all items in the current category."""
     self.deselect_current_category()
 
- 
- 
-  
+
+  @handle("map_campus", "show")
   def map_campus_show(self, **event_args):
-    # Set the bounding box coordinates (North, South, East, West)
-    # Example coordinates for UCSD campus area:
-    north_lat = 32.8890
-    south_lat = 32.8700
-    east_lng = -117.2300
-    west_lng = -117.2500
-  
-    call('restrictMapBounds', self.map_campus, north_lat, south_lat, east_lng, west_lng)
+    # Pass your Google Cloud Map ID directly to the underlying map widget
+    call('setMapId', self.map_campus, "a591fee8333323d09c60e803")
