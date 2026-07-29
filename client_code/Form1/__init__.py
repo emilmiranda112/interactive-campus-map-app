@@ -5,14 +5,6 @@ import anvil.js
 
 class Form1(Form1Template):
   def __init__(self, **properties):
-
-    
-    self.panel_sub_checkboxes.visible = False
-    self.drop_down_category.visible = False
-    self.btn_select_all_click.visible = False
-    self.btn_deselect_category.visible = False
-
-    
     #Hide street view button
     self.map_campus.street_view_control = False
     
@@ -128,7 +120,7 @@ class Form1(Form1Template):
   def text_box_search_change(self, **event_args):
     """Shows a drop-down list of search results as the user types"""
     query = self.text_box_search.text.lower().strip() if self.text_box_search.text else ""
-
+    self.text_box_search.foreground = "#800000"
     # Clear the suggestions list panel
     self.panel_search_results.clear()
 
@@ -157,7 +149,7 @@ class Form1(Form1Template):
         # Limit to top 5 results so mobile screens aren't cluttered
         if matches_found >= 5:
           break
-
+      
   def select_search_location(self, loc):
     """Called when user taps an item from the search dropdown"""
     self.panel_search_results.clear()
@@ -340,21 +332,6 @@ class Form1(Form1Template):
     """Deselects all items in the current category."""
     self.deselect_current_category()
 
-  @handle("btn_toggle_filters", "click")
-  def btn_toggle_filters_click(self, **event_args):
-    """Expands or collapses the filter options over the map."""
-    # Toggle visibility of the controls inside the panel
-    is_expanded = not self.panel_sub_checkboxes.visible
-
-    self.panel_sub_checkboxes.visible = is_expanded
-    self.drop_down_category.visible = is_expanded
-    self.btn_select_all_click.visible = is_expanded
-    self.btn_deselect_category.visible = is_expanded
-
-    # Update button arrow indicator
-    if is_expanded:
-      self.btn_toggle_filters.text = "▼ Close Filters"
-    else:
-      self.btn_toggle_filters.text = "▲ Places & Filters"
+ 
  
   
