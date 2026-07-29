@@ -1103,3 +1103,10 @@ div[anvil-name="floating_menu"] {
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.25) !important;
   padding: 10px !important;
 }
+
+/* Give the map node container an explicit full height */
+div[anvil-name="content_panel"] {
+  height: calc(100vh - 60px) !important; /* Fills screen minus top nav bar */
+  width: 100% !important;
+  min-height: 500px !important;
+}

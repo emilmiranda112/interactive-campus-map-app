@@ -36,6 +36,7 @@ components:
   properties:
     background: theme:Primary
     border: 2px solid black
+    col_spacing: medium
     col_widths: '{"TGIMXZ":60}'
     spacing:
       margin: [0, null, null, null]
