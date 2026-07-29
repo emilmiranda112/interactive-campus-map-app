@@ -1123,3 +1123,24 @@ div[anvil-name="content_panel"] {
   border-radius: 12px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
 }
+
+/* Ensure the outer container establishes a positioning context */
+.anvil-container, .content {
+  position: relative !important;
+}
+
+/* Make sure map stays behind floating elements */
+.anvil-map-container {
+  position: absolute !important;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh !important;
+  z-index: 1 !important; /* Low layer */
+}
+/* Hides Google's default labels (city names, streets, POIs) while leaving custom pins intact */
+.gm-style-cc, 
+.gm-style .gm-style-maptype-status, 
+.gm-style div[style*="font-family"] {
+  display: none !important;
+}

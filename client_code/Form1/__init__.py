@@ -2,9 +2,13 @@ from ._anvil_designer import Form1Template
 import anvil.server
 from anvil import *
 import anvil.js
+from anvil.js import call
+
 
 class Form1(Form1Template):
   def __init__(self, **properties):
+    self.init_components()
+    
     #Hide street view button
     self.map_campus.street_view_control = False
     
@@ -335,3 +339,12 @@ class Form1(Form1Template):
  
  
   
+  def map_campus_show(self, **event_args):
+    # Set the bounding box coordinates (North, South, East, West)
+    # Example coordinates for UCSD campus area:
+    north_lat = 32.8890
+    south_lat = 32.8700
+    east_lng = -117.2300
+    west_lng = -117.2500
+  
+    call('restrictMapBounds', self.map_campus, north_lat, south_lat, east_lng, west_lng)
