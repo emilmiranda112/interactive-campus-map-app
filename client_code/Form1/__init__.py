@@ -337,7 +337,3 @@ class Form1(Form1Template):
     self.deselect_current_category()
 
 
-  @handle("map_campus", "show")
-  def map_campus_show(self, **event_args):
-    # Pass your Google Cloud Map ID directly to the underlying map widget
-    call('setMapId', self.map_campus, "a591fee8333323d09c60e803")
