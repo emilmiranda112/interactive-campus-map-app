@@ -5,37 +5,67 @@ name: Interactive Campus Map
 native_deps:
   head_html: |-
     <script>
-      function setMapId(anvilMapComponent, mapId) {
-        if (anvilMapComponent && anvilMapComponent._map) {
-          anvilMapComponent._map.setOptions({
-            mapId: mapId
-          });
-        }
+      function loadCampusMaps(apiKey) {
+        if (window.google && window.google.maps) return Promise.resolve();
+        if (window.campusMapsApiPromise) return window.campusMapsApiPromise;
+
+        window.campusMapsApiPromise = new Promise((resolve, reject) => {
+          const script = document.createElement("script");
+          script.src = "https://maps.googleapis.com/maps/api/js?key=" + encodeURIComponent(apiKey) + "&v=weekly";
+          script.async = true;
+          script.onload = resolve;
+          script.onerror = () => reject(new Error("Google Maps failed to load."));
+          document.head.appendChild(script);
+        });
+        return window.campusMapsApiPromise;
       }
 
-      function hidePoiLabels(anvilMapComponent) {
-        if (anvilMapComponent && anvilMapComponent._poiLabelsHidden) return;
-
-        let attempts = 0;
-
-        function applyStyles() {
-          const map = anvilMapComponent && anvilMapComponent._map;
-          if (!map) {
-            if (attempts++ < 60) setTimeout(applyStyles, 50);
-            return;
-          }
-
-          map.setOptions({
-            styles: [{
-              featureType: "poi",
-              elementType: "labels",
-              stylers: [{ visibility: "off" }]
-            }]
+      function createCampusMap(host, config) {
+        return loadCampusMaps(config.api_key).then(() => {
+          const canvas = host.querySelector(".campus-map-canvas");
+          return new google.maps.Map(canvas, {
+            center: {lat: 33.163395832473206, lng: -117.24753965466618},
+            zoom: 17,
+            minZoom: 16,
+            maxZoom: 22,
+            streetViewControl: false,
+            gestureHandling: "greedy",
+            mapId: config.map_id
           });
-          anvilMapComponent._poiLabelsHidden = true;
-        }
+        });
+      }
 
-        applyStyles();
+      function campusMarkerIcon(icon) {
+        if (!icon || typeof icon === "string") return icon || undefined;
+        const markerIcon = {url: icon.url};
+        if (icon.scaled_size) {
+          markerIcon.scaledSize = new google.maps.Size(icon.scaled_size[0], icon.scaled_size[1]);
+        }
+        return markerIcon;
+      }
+
+      function addCampusMarker(map, lat, lng, title, icon, clickHandler) {
+        const marker = new google.maps.Marker({
+          map: map,
+          position: {lat: lat, lng: lng},
+          title: title,
+          icon: campusMarkerIcon(icon)
+        });
+        if (clickHandler) marker.addListener("click", clickHandler);
+        return marker;
+      }
+
+      function removeCampusMarker(marker) {
+        marker.setMap(null);
+      }
+
+      function updateCampusMarkerPosition(marker, lat, lng) {
+        marker.setPosition({lat: lat, lng: lng});
+      }
+
+      function centerCampusMap(map, lat, lng, zoom) {
+        map.setCenter({lat: lat, lng: lng});
+        map.setZoom(zoom);
       }
     </script>
 package_name: Interactive_Campus_Map

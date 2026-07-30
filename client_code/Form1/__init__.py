@@ -8,13 +8,6 @@ from anvil.js import call
 class Form1(Form1Template):
   def __init__(self, **properties):
     self.init_components()
-    
-    #Hide street view button
-    self.map_campus.street_view_control = False
-    
-    #Enable single finger scroll
-    self.map_campus.gesture_handling = 'greedy'
-    call('hidePoiLabels', self.map_campus)
 
     # 1. Stretch the top panel across the full screen
     self.flow_panel_1.role = 'full-width-row'  # Forces full-width stretching
@@ -25,13 +18,16 @@ class Form1(Form1Template):
     # 3. If your left column/container has a name (e.g. column_panel_1), color it too:
     # self.column_panel_1.background = "#800020"
     
+    self.map_markers = []
     self.user_marker = None
     self.location_checkboxes = {}
-    
-    #self.map_campus.map_type_id = 'satellite'
-    # 2. Keep map centered on your specific hardcoded location
-    self.map_campus.center = anvil.GoogleMap.LatLng(33.163395832473206, -117.24753965466618)
-    self.map_campus.zoom = 17
+
+    map_config = anvil.server.call('get_maps_browser_config')
+    self.campus_map = call(
+      'createCampusMap',
+      anvil.js.get_dom_node(self.map_campus),
+      map_config,
+    )
     
     self.active_categories = set()
     # 3. Fetch dataset from DataParser backend
@@ -60,35 +56,30 @@ class Form1(Form1Template):
     else:
       print("Geolocation is not supported by this browser.")
 
-  @handle("map_campus", "tilesloaded")
-  def map_campus_tilesloaded(self, **event_args):
-    """Apply POI styling after Google Maps has rendered its base tiles."""
-    call('hidePoiLabels', self.map_campus)
-
   def update_user_location(self, position, **event_args):
     """Callback function triggered every time the user's coordinates change."""
     lat = position.coords.latitude
     lng = position.coords.longitude
-    user_pos = anvil.GoogleMap.LatLng(lat, lng)
 
     # If user marker doesn't exist yet, create it
     if self.user_marker is None:
-      self.user_marker = anvil.GoogleMap.Marker(
-        position=user_pos,
-        title="You are here!",
-        icon="https://maps.google.com/mapfiles/ms/icons/blue-dot.png"
+      self.user_marker = call(
+        'addCampusMarker',
+        self.campus_map,
+        lat,
+        lng,
+        "You are here!",
+        "https://maps.google.com/mapfiles/ms/icons/blue-dot.png",
+        None,
       )
-      self.map_campus.add_component(self.user_marker)
     else:
-      # Just update the existing marker's position
-      self.user_marker.position = user_pos
+      call('updateCampusMarkerPosition', self.user_marker, lat, lng)
 
   def handle_location_error(self, error, **event_args):
     """Handles GPS permission denial or timeouts gracefully."""
     print("Could not retrieve user location:", error.message)
-    # 5. Draw initial map state & start GPS tracking
+    # Draw checklist markers even when location permission is unavailable.
     self.drop_map_markers()
-    self.start_user_tracking()
 
   @handle("drop_down_category", "change")
   def drop_down_category_change(self, **event_args):
@@ -164,7 +155,7 @@ class Form1(Form1Template):
     """Called when user taps an item from the search dropdown"""
     self.panel_search_results.clear()
     self.panel_search_results.visible = False
-    self.map_campus.clear()
+    self.clear_map_markers()
 
     # Delegate interactive marker creation
     self.drop_single_interactive_marker(loc)
@@ -173,16 +164,7 @@ class Form1(Form1Template):
     lat = float(loc.get('lat') or loc.get('latitude') or 0)
     lng = float(loc.get('lng') or loc.get('longitude') or loc.get('long') or 0)
     if lat != 0 and lng != 0:
-      self.map_campus.center = GoogleMap.LatLng(lat, lng)
-      self.map_campus.zoom = 19
-
-    # Safely update side panel elements
-    if hasattr(self, 'label_name'):
-      self.label_name.text = loc.get('name') or loc.get('title') or ''
-    if hasattr(self, 'label_description'):
-      self.label_description.text = loc.get('description') or loc.get('desc') or ''
-    if hasattr(self, 'image_location') and loc.get('image'):
-      self.image_location.source = loc.get('image')
+      call('centerCampusMap', self.campus_map, lat, lng, 19)
 
   def drop_single_interactive_marker(self, loc):
     """Creates and drops a single custom interactive marker"""
@@ -203,23 +185,7 @@ class Form1(Form1Template):
     elif hasattr(icon_val, 'url'):
       icon_url = icon_val.url
 
-    marker_kwargs = {
-      'position': GoogleMap.LatLng(lat, lng),
-      'title': name
-    }
-    if icon_url:
-      marker_kwargs['icon'] = icon_url
-
-    marker = GoogleMap.Marker(**marker_kwargs)
-
-    # ATTACH THE DESCRIPTION TAG HERE:
-    marker.tag = desc
-
-    # Attach click handler
-    if hasattr(self, 'marker_click'):
-      marker.set_event_handler('click', self.marker_click)
-
-    self.map_campus.add_component(marker)
+    self.add_location_marker(lat, lng, name, desc, icon_url)
 
   
   @handle("text_box_search", "pressed_enter")
@@ -232,43 +198,35 @@ class Form1(Form1Template):
     self.drop_map_markers()
 
   def drop_map_markers(self):
-    # Clear canvas
-    self.map_campus.clear()
-
-    # Re-add live GPS location pin if active
-    if getattr(self, 'user_marker', None) is not None:
-      self.map_campus.add_component(self.user_marker)
-
     # Define icon styles & sizes
-    icon_size = anvil.GoogleMap.Size(30, 30)
     category_icons = {
       "Restrooms": {
         'url': "_/theme/BlueRestroomIcon.png",
-        'scaledSize': anvil.GoogleMap.Size(35, 30)
+        'scaled_size': [35, 30]
       },
       "Sports": {
         'url': "_/theme/RunIcon.png",
-        'scaledSize': icon_size
+        'scaled_size': [30, 30]
       },
       "Classrooms": {
         'url': "_/theme/ClassroomIcon.png",
-        'scaledSize': icon_size
+        'scaled_size': [30, 30]
       },
       "Academic & Culture": {
         'url': "_/theme/BookIcon.png",
-        'scaledSize': icon_size
+        'scaled_size': [30, 30]
       },
       "Cafeteria": {
-      'url': "_/theme/FoodIcon.png",
-      'scaledSize': icon_size
+        'url': "_/theme/FoodIcon.png",
+        'scaled_size': [30, 30]
       },
-    "Parking": {
-      'url': "_/theme/ParkingIcon.png",
-      'scaledSize': icon_size
+      "Parking": {
+        'url': "_/theme/ParkingIcon.png",
+        'scaled_size': [30, 30]
       },
       "Office and Facilities": {
         'url': "_/theme/OfficeIcon.png",
-        'scaledSize': icon_size
+        'scaled_size': [30, 30]
       },
       "200's Quad": "http://maps.google.com/mapfiles/ms/icons/purple-dot.png",
       "300's Quad": "http://maps.google.com/mapfiles/ms/icons/orange-dot.png",
@@ -277,25 +235,45 @@ class Form1(Form1Template):
       
     
 
-    # Only draw markers whose specific sub-checkbox IS checked!
+    self.clear_map_markers()
+
+    # Only draw markers whose specific sub-checkbox is checked.
     for key, item in self.location_checkboxes.items():
       if item['checkbox'].checked:
         loc = item['location']
         category = loc.get('category', '').strip()
         chosen_icon = category_icons.get(category, "http://maps.google.com/mapfiles/ms/icons/red-dot.png")
 
-        marker = anvil.GoogleMap.Marker(
-          position=anvil.GoogleMap.LatLng(loc['lat'], loc['lng']),
-          title=loc['name'],
-          icon=chosen_icon
+        self.add_location_marker(
+          float(loc['lat']),
+          float(loc['lng']),
+          loc['name'],
+          loc['desc'],
+          chosen_icon,
         )
-        marker.tag = loc['desc']
-        marker.add_event_handler("click", self.marker_click)
-        self.map_campus.add_component(marker)
 
-  def marker_click(self, sender, **event_args):
-    """Fires when a marker pin is clicked"""
-    alert(content=sender.tag, title=sender.title)
+  def clear_map_markers(self):
+    for marker in self.map_markers:
+      call('removeCampusMarker', marker)
+    self.map_markers = []
+
+  def add_location_marker(self, lat, lng, name, description, icon=None):
+    marker = call(
+      'addCampusMarker',
+      self.campus_map,
+      lat,
+      lng,
+      name,
+      icon,
+      anvil.js.report_exceptions(
+        lambda: self.marker_click(name, description)
+      ),
+    )
+    self.map_markers.append(marker)
+
+  def marker_click(self, name, description):
+    """Show the selected location's description."""
+    alert(content=description, title=name)
 
 
   

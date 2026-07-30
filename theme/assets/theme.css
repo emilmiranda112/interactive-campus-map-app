@@ -1138,3 +1138,15 @@ div[anvil-name="content_panel"] {
   height: 100vh !important;
   z-index: 1 !important; /* Low layer */
 }
+
+.campus-map-host {
+  display: block;
+  height: 75vh;
+  min-height: 480px;
+  width: 100%;
+}
+
+.campus-map-canvas {
+  height: 100%;
+  width: 100%;
+}
