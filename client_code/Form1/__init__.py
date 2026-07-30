@@ -272,7 +272,7 @@ class Form1(Form1Template):
       name,
       icon,
       anvil.js.report_exceptions(
-        lambda: self.marker_click(name, description)
+        lambda event: self.marker_click(name, description)
       ),
     )
     self.map_markers.append(marker)

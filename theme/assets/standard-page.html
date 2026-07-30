@@ -76,7 +76,10 @@
       showSidebar();
     }
   });
-  $('.left-nav').off('click').on('click', 'a, button', function() {
+  $('.left-nav').off('click').on('click', '.anvil-role-close-sidebar, .anvil-role-close-sidebar *', function(event) {
+    event.stopImmediatePropagation();
+    hideSidebar();
+  }).on('click', 'a, button', function() {
     if ($('.nav-shield').is(":visible")) {
       $('.nav-shield').trigger('click');
     }

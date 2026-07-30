@@ -1,24 +1,23 @@
 <anvil-form container="HtmlTemplate" prop:background="" prop:border="" prop:foreground="" prop:html="@theme:standard-page.html" prop:visible="true">
-    <anvil-component type="ColumnPanel" name="content_panel" prop:background="theme:Primary" prop:border="2px solid black" prop:col_spacing="medium" prop:col_widths='"{\"TGIMXZ\":60}"' prop:spacing='{"margin":[0,null,null,null]}' container:slot="default">
-        <anvil-component type="ColumnPanel" name="column_panel_2" container:grid_position="PCOBRM,MLYGKV">
-            <anvil-component type="TextBox" name="text_box_search" prop:background="theme:Primary Container" prop:border="4px solid grey" prop:foreground="theme:Primary" prop:placeholder="Search campus landmarks..." container:grid_position="PFXFSG,NWWVJQ"></anvil-component>
-            <anvil-component type="Button" name="btn_clear_all_click" prop:background="white" prop:icon="fa:repeat" prop:text="Clear Map
-            " container:grid_position="NNYHNL,IFEXNT"></anvil-component>
-            <anvil-component type="FlowPanel" name="panel_search_results" prop:background="theme:On Primary" prop:border="" prop:foreground="" container:grid_position="DRGEIS,XKGOCH"></anvil-component>
-        </anvil-component>
-        <anvil-component type="Spacer" name="spacer_1" prop:height='"1"' container:grid_position="BIVQFI,QANLVK" container:row_background=""></anvil-component>
-        <anvil-component type="HtmlComponent" name="map_campus" prop:classes="campus-map-host" prop:html="" container:full_width_row="true" container:grid_position="OHXBUG,TGIMXZ"></anvil-component>
+  <anvil-component type="ColumnPanel" name="content_panel" prop:background="theme:Primary" prop:border="2px solid black" prop:col_spacing="medium" prop:col_widths='"{\"TGIMXZ\":60}"' prop:spacing='{"margin":[0,null,null,null]}' container:slot="default">
+    <anvil-component type="ColumnPanel" name="column_panel_2" container:grid_position="PCOBRM,MLYGKV">
+      <anvil-component type="TextBox" name="text_box_search" prop:background="theme:Primary Container" prop:border="4px solid grey" prop:foreground="theme:Primary" prop:placeholder="Search campus landmarks..." container:grid_position="PFXFSG,NWWVJQ"></anvil-component>
+      <anvil-component type="Button" name="btn_clear_all_click" prop:background="white" prop:icon="fa:repeat" prop:text="Clear Map" prop:align="center" container:grid_position="NNYHNL,IFEXNT"></anvil-component>
+      <anvil-component type="FlowPanel" name="panel_search_results" prop:background="theme:On Primary" prop:border="" prop:foreground="" container:grid_position="DRGEIS,XKGOCH"></anvil-component>
     </anvil-component>
-    <anvil-component type="ColumnPanel" name="column_panel_1" prop:background="theme:Primary" prop:border="4px solid black" prop:visible="true" container:slot="left-nav">
-        <anvil-component type="TextBox" name="text_box_1" prop:background="theme:Primary Container" prop:border="4px solid grey" prop:enabled="false" prop:font="" prop:foreground="theme:Primary" prop:text="Filter Landmarks" container:grid_position="EOLYMF,NFAJYI"></anvil-component>
-        <anvil-component type="Button" name="btn_select_all_click" prop:background="white" prop:icon="fa:check" prop:text="Select All Category" container:grid_position="RSNXXV,TEBLVX"></anvil-component>
-        <anvil-component type="Button" name="btn_deselect_category" prop:background="white" prop:icon="fa:window-close" prop:text="Deselect All Category" container:grid_position="MDRAKR,FLLGGF"></anvil-component>
-        <anvil-component type="DropDown" name="drop_down_category" prop:background="white" prop:border="" prop:foreground="theme:Primary" container:grid_position="OEZGCY,ADRMFM"></anvil-component>
-        <anvil-component type="ColumnPanel" name="panel_sub_checkboxes" prop:border="" container:grid_position="BBSCQO,NYQCLJ"></anvil-component>
-        <anvil-component type="Spacer" name="spacer_2" prop:height='"1000.0751953125"' container:grid_position="PBNESU,VEPSSO"></anvil-component>
-    </anvil-component>
-    <anvil-component type="FlowPanel" name="flow_panel_1" prop:role="null" prop:vertical_align="middle" prop:align="left" prop:background="theme:Primary" prop:foreground="theme:Primary Container" prop:gap="tiny" prop:visible="false" prop:border="4px solid black" prop:spacing='{"margin":[2,15,null,0]}' container:slot="title">
-        <anvil-component type="Image" name="image_1" prop:display_mode="zoom_to_fill" prop:height='"89.237060546875"' prop:source="_/theme/logo.png" container:width="104.967478515625"></anvil-component>
-        <anvil-component type="Label" name="label_1" prop:background="" prop:font="Barlow" prop:font_size="28" prop:foreground="theme:Primary Container" prop:text="RBV - Interactive Campus Map               " container:expand="true"></anvil-component>
-    </anvil-component>
+    <anvil-component type="Spacer" name="spacer_1" prop:height='"1"' container:grid_position="BIVQFI,QANLVK" container:row_background=""></anvil-component>
+    <div class="campus-map-host" anvil:name="map_campus" anvil:container:full_width_row="true" anvil:container:grid_position="OHXBUG,TGIMXZ"></div>
+  </anvil-component>
+  <anvil-component type="ColumnPanel" name="column_panel_1" prop:background="theme:Primary" prop:border="4px solid black" prop:visible="true" container:slot="left-nav">
+    <anvil-component type="Button" name="btn_close_sidebar" prop:background="white" prop:icon="fa:times" prop:role="close-sidebar" prop:text="Close Menu" container:grid_position="ONQECX,HYTYOV"></anvil-component>
+    <anvil-component type="Button" name="btn_select_all_click" prop:background="white" prop:icon="fa:check" prop:text="Select All Category" container:grid_position="RSNXXV,TEBLVX"></anvil-component>
+    <anvil-component type="Button" name="btn_deselect_category" prop:background="white" prop:icon="fa:window-close" prop:text="Deselect All Category" container:grid_position="MDRAKR,FLLGGF"></anvil-component>
+    <anvil-component type="DropDown" name="drop_down_category" prop:background="white" prop:border="" prop:foreground="theme:Primary" container:grid_position="OEZGCY,ADRMFM"></anvil-component>
+    <anvil-component type="ColumnPanel" name="panel_sub_checkboxes" prop:border="" container:grid_position="BBSCQO,NYQCLJ"></anvil-component>
+    <anvil-component type="Spacer" name="spacer_2" prop:height='"1000.0751953125"' container:grid_position="PBNESU,VEPSSO"></anvil-component>
+  </anvil-component>
+  <anvil-component type="FlowPanel" name="flow_panel_1" prop:role="null" prop:vertical_align="middle" prop:align="left" prop:background="theme:Primary" prop:foreground="theme:Primary Container" prop:gap="tiny" prop:visible="false" prop:border="4px solid black" prop:spacing='{"margin":[2,15,null,0]}' container:slot="title">
+    <anvil-component type="Image" name="image_1" prop:display_mode="zoom_to_fill" prop:height='"89.237060546875"' prop:source="_/theme/logo.png" container:width="104.967478515625"></anvil-component>
+    <anvil-component type="Label" name="label_1" prop:background="" prop:font="Barlow" prop:font_size="28" prop:foreground="theme:Primary Container" prop:text="RBV - Interactive Campus Map               " container:expand="true"></anvil-component>
+  </anvil-component>
 </anvil-form>
