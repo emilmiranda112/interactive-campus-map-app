@@ -21,13 +21,7 @@ class Form1(Form1Template):
     self.map_markers = []
     self.user_marker = None
     self.location_checkboxes = {}
-
-    map_config = anvil.server.call('get_maps_browser_config')
-    self.campus_map = call(
-      'createCampusMap',
-      anvil.js.get_dom_node(self.map_campus),
-      map_config,
-    )
+    self.campus_map = None
     
     self.active_categories = set()
     # 3. Fetch dataset from DataParser backend
@@ -36,6 +30,18 @@ class Form1(Form1Template):
     # 4. Populate Main Category Dropdown dynamically
     categories = sorted(list(set(loc.get('category', '').strip() for loc in self.locations if loc.get('category'))))
     self.drop_down_category.items = [("Select a category...", None)] + [(cat, cat) for cat in categories]
+
+  @handle("", "show")
+  def form_show(self, **event_args):
+    if self.campus_map is not None:
+      return
+
+    map_config = anvil.server.call('get_maps_browser_config')
+    self.campus_map = call(
+      'createCampusMap',
+      anvil.js.get_dom_node(self.map_campus),
+      map_config,
+    )
     self.start_user_tracking()
 
   def start_user_tracking(self):
