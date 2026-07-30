@@ -1145,8 +1145,3 @@ div[anvil-name="content_panel"] {
   min-height: 480px;
   width: 100%;
 }
-
-.campus-map-canvas {
-  height: 100%;
-  width: 100%;
-}

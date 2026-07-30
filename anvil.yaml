@@ -22,8 +22,7 @@ native_deps:
 
       function createCampusMap(host, config) {
         return loadCampusMaps(config.api_key).then(() => {
-          const canvas = host.querySelector(".campus-map-canvas");
-          return new google.maps.Map(canvas, {
+          return new google.maps.Map(host, {
             center: {lat: 33.163395832473206, lng: -117.24753965466618},
             zoom: 17,
             minZoom: 16,
