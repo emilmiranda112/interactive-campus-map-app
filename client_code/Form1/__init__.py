@@ -14,6 +14,7 @@ class Form1(Form1Template):
     
     #Enable single finger scroll
     self.map_campus.gesture_handling = 'greedy'
+    call('hidePoiLabels', self.map_campus)
 
     # 1. Stretch the top panel across the full screen
     self.flow_panel_1.role = 'full-width-row'  # Forces full-width stretching
@@ -39,10 +40,10 @@ class Form1(Form1Template):
     # 4. Populate Main Category Dropdown dynamically
     categories = sorted(list(set(loc.get('category', '').strip() for loc in self.locations if loc.get('category'))))
     self.drop_down_category.items = [("Select a category...", None)] + [(cat, cat) for cat in categories]
+    self.start_user_tracking()
 
-
-    def start_user_tracking(self):
-      """Requests GPS permission and tracks the user's position live."""
+  def start_user_tracking(self):
+    """Requests GPS permission and tracks the user's position live."""
     geolocation = anvil.js.window.navigator.geolocation
 
     if geolocation:
@@ -58,6 +59,11 @@ class Form1(Form1Template):
       )
     else:
       print("Geolocation is not supported by this browser.")
+
+  @handle("map_campus", "tilesloaded")
+  def map_campus_tilesloaded(self, **event_args):
+    """Apply POI styling after Google Maps has rendered its base tiles."""
+    call('hidePoiLabels', self.map_campus)
 
   def update_user_location(self, position, **event_args):
     """Callback function triggered every time the user's coordinates change."""
@@ -335,5 +341,3 @@ class Form1(Form1Template):
   def btn_deselect_category_click(self, **event_args):
     """Deselects all items in the current category."""
     self.deselect_current_category()
-
-

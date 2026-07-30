@@ -1138,9 +1138,3 @@ div[anvil-name="content_panel"] {
   height: 100vh !important;
   z-index: 1 !important; /* Low layer */
 }
-/* Hides Google's default labels (city names, streets, POIs) while leaving custom pins intact */
-.gm-style-cc, 
-.gm-style .gm-style-maptype-status, 
-.gm-style div[style*="font-family"] {
-  display: none !important;
-}

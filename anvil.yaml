@@ -12,6 +12,31 @@ native_deps:
           });
         }
       }
+
+      function hidePoiLabels(anvilMapComponent) {
+        if (anvilMapComponent && anvilMapComponent._poiLabelsHidden) return;
+
+        let attempts = 0;
+
+        function applyStyles() {
+          const map = anvilMapComponent && anvilMapComponent._map;
+          if (!map) {
+            if (attempts++ < 60) setTimeout(applyStyles, 50);
+            return;
+          }
+
+          map.setOptions({
+            styles: [{
+              featureType: "poi",
+              elementType: "labels",
+              stylers: [{ visibility: "off" }]
+            }]
+          });
+          anvilMapComponent._poiLabelsHidden = true;
+        }
+
+        applyStyles();
+      }
     </script>
 package_name: Interactive_Campus_Map
 renamed: true
