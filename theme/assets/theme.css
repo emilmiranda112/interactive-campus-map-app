@@ -1155,11 +1155,62 @@ input.anvil-role-map-search-field {
   color: white !important;
 }
 
+.app-bar .title .anvil-role-school-title {
+  font-size: 20px !important;
+  white-space: nowrap;
+}
+
+/* The visible text is inside .label-text, so constrain that element too.
+   This keeps the app-bar to one row instead of allowing the final word to
+   create a second line above the map controls. */
+.app-bar .title .anvil-role-school-title,
+.app-bar .title .anvil-role-school-title > .label-text {
+  min-width: 0;
+  white-space: nowrap !important;
+}
+
+.app-bar .title .anvil-role-school-title > .label-text {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.app-bar .title .anvil-role-school-title-bar > .flow-panel-gutter {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+
+@media (max-width: 1200px) {
+  .app-bar .title {
+    max-width: calc(100vw - 240px);
+    overflow: hidden;
+  }
+
+  .app-bar .title .anvil-role-school-title {
+    /* Use the available horizontal header space, rather than wrapping. */
+    flex: 0 1 280px;
+    width: 280px;
+    max-width: 280px;
+    font-size: 14px !important;
+  }
+}
+
 .nav-holder .left-nav {
   z-index: 35;
 }
 
 @media (max-width: 998px) {
+  .app-bar .title .anvil-role-school-title {
+    flex: 0 1 150px;
+    width: 150px;
+    max-width: 150px;
+    overflow: hidden;
+    font-size: 11px !important;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
   html:not(.designer) .nav-holder .left-nav {
     z-index: 35;
   }
