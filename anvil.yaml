@@ -27,6 +27,7 @@ native_deps:
             zoom: 17,
             minZoom: 16,
             maxZoom: 22,
+            mapTypeId: "satellite",
             streetViewControl: false,
             gestureHandling: "greedy",
             mapId: config.map_id
