@@ -229,8 +229,10 @@ class Form1(Form1Template):
         'url': "_/theme/OfficeIcon.png",
         'scaled_size': [30, 30]
       },
+      "100's Quad": "http://maps.google.com/mapfiles/ms/icons/green-dot.png",
       "200's Quad": "http://maps.google.com/mapfiles/ms/icons/purple-dot.png",
       "300's Quad": "http://maps.google.com/mapfiles/ms/icons/orange-dot.png",
+      "600's Quad": "http://maps.google.com/mapfiles/ms/icons/red-dot.png",
       "700's Quad": "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png",
     }
       
