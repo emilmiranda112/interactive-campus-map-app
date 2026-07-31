@@ -1,10 +1,16 @@
-import anvil.tables as tables
-import anvil.tables.query as q
-from anvil.tables import app_tables
 import anvil.server
+import anvil.secrets
 import csv
 import io
 import urllib.request
+
+
+@anvil.server.callable
+def get_maps_browser_config():
+  return {
+    "api_key": anvil.secrets.get_secret("Maps_api_key"),
+    "map_id": "a591fee8333323d07011fba9",
+  }
 
 @anvil.server.callable
 def load_campus_data():
