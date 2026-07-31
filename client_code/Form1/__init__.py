@@ -9,14 +9,8 @@ class Form1(Form1Template):
   def __init__(self, **properties):
     self.init_components()
 
-    # 1. Stretch the top panel across the full screen
-    self.flow_panel_1.role = 'full-width-row'  # Forces full-width stretching
-
-    # 2. Make the left sidebar background maroon
+    # Make the filter drawer background maroon.
     self.panel_sub_checkboxes.background = "#800020"
-
-    # 3. If your left column/container has a name (e.g. column_panel_1), color it too:
-    # self.column_panel_1.background = "#800020"
     
     self.map_markers = []
     self.user_marker = None
@@ -24,10 +18,10 @@ class Form1(Form1Template):
     self.campus_map = None
     
     self.active_categories = set()
-    # 3. Fetch dataset from DataParser backend
+    # Fetch dataset from DataParser backend.
     self.locations = anvil.server.call('load_campus_data')
 
-    # 4. Populate Main Category Dropdown dynamically
+    # Populate main category dropdown dynamically.
     categories = sorted(list(set(loc.get('category', '').strip() for loc in self.locations if loc.get('category'))))
     self.drop_down_category.items = [("Select a category...", None)] + [(cat, cat) for cat in categories]
 

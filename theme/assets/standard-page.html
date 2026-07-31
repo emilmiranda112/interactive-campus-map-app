@@ -48,6 +48,7 @@
   var appBar = $('.app-bar')[0];
   
   function hideSidebar() {
+    appBar.classList.remove("drawer-open");
     ln.animate({left: -ln.outerWidth()}, function() {
       ln.removeClass("in-transition shown").addClass("hidden");
       $('.nav-shield').removeClass("shown");
@@ -59,6 +60,7 @@
   }
   
   function showSidebar() {
+    appBar.classList.add("drawer-open");
     $('.nav-shield').addClass("shown");
     ln.addClass("shown").removeClass("hidden").css({left: "-100%"}).css({left: -ln.outerWidth()}).animate({left: 0}, function() {
       ln.removeClass("in-transition");
@@ -79,10 +81,8 @@
   $('.left-nav').off('click').on('click', '.anvil-role-close-sidebar, .anvil-role-close-sidebar *', function(event) {
     event.stopImmediatePropagation();
     hideSidebar();
-  }).on('click', 'a, button', function() {
-    if ($('.nav-shield').is(":visible")) {
-      $('.nav-shield').trigger('click');
-    }
+  }).on('click', function(event) {
+    event.stopPropagation();
   });
   
   document.addEventListener('scroll', function() {
