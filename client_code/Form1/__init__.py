@@ -9,6 +9,7 @@ class Form1(Form1Template):
   def __init__(self, **properties):
     self.init_components()
 
+    
     # Make the filter drawer background maroon.
     self.panel_sub_checkboxes.background = "#800020"
     
