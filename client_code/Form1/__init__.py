@@ -70,7 +70,7 @@ class Form1(Form1Template):
         lat,
         lng,
         "You are here!",
-        "https://maps.google.com/mapfiles/ms/icons/blue-dot.png",
+        #"_/theme/UserMarker.png",
         None,
       )
     else:
