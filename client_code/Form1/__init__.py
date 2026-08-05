@@ -63,6 +63,12 @@ class Form1(Form1Template):
     lng = position.coords.longitude
 
     # If user marker doesn't exist yet, create it
+    user_icon = {
+      'url': "_/theme/BlueUserMarker.png",
+      'scaled_size': [60, 60]  
+    }
+
+    # If user marker doesn't exist yet, create it
     if self.user_marker is None:
       self.user_marker = call(
         'addCampusMarker',
@@ -70,9 +76,10 @@ class Form1(Form1Template):
         lat,
         lng,
         "You are here!",
-        #"_/theme/UserMarker.png",
+        user_icon,
         None,
       )
+      
     else:
       call('updateCampusMarkerPosition', self.user_marker, lat, lng)
 
