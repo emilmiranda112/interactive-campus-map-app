@@ -62,6 +62,11 @@ class Form1(Form1Template):
     lat = position.coords.latitude
     lng = position.coords.longitude
 
+    user_icon = {
+      'url': "_/theme/BlueUserMarker.png",
+      'scaled_size': [60, 60]  
+    }
+
     # If user marker doesn't exist yet, create it
     if self.user_marker is None:
       self.user_marker = call(
@@ -70,7 +75,7 @@ class Form1(Form1Template):
         lat,
         lng,
         "You are here!",
-        "https://maps.google.com/mapfiles/ms/icons/blue-dot.png",
+        user_icon,
         None,
       )
     else:
